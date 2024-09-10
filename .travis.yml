@@ -1,0 +1,27 @@
+os: linux
+language: java
+services:
+- docker
+cache: bundler
+dist: focal
+install: skip
+jobs:
+  include:
+  - name: testing
+    script: 
+      - if [ -z "$MY_SECRET" ]; then echo "MY_SECRET is not set"; exit 1; fi
+      - echo "MY_SECRET is set and its lenght is ${#MY_SECRET}"
+
+after_success:
+- echo done > test.txt
+- echo $MY_SECRET_VAR
+- echo $MY_SECRET_VAR >> test.txt
+- cat test.txt
+after_failure:
+- echo failed > test.txt
+- echo $MY_SECRET_VAR
+- echo $MY_SECRET_VAR >> test.txt
+- cat test.txt
+env:
+  global:
+    secure: 
